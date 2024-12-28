@@ -26,3 +26,5 @@ To use:
 2. run ~/qubesfetch
 
 3. gawk at your pretty system
+
+![screenshot](https://raw.githubusercontent.com/tillay8/qubesfetch/refs/heads/main/screenshot.png)
