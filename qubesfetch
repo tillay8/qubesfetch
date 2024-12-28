@@ -6,6 +6,8 @@ HEADER_COLOR="\033[1;38;2;53;117;217m"
 LABEL_COLOR="\033[1;38;2;150;140;240m"
 INFOS_COLOR="\033[22m\033[38;2;220;230;255m"
 
+clear # :(
+
 echo -e "${LOGO_TOP}                     .lxxo'                     "
 echo -e "${LOGO_TOP}                  .:xOOOOOOxc'                  "
 echo -e "${LOGO_TOP}              .;oOOOOOOOOOOOOOOd;.              "
