@@ -1,7 +1,7 @@
-# qubefetch
+# Qubesfetch
 custom fetch scripts for QubesOS
 
-# instructions
+# Instructions
 
 1. Download the qubesfetch script (make sure you are in the home directory)
 
