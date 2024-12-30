@@ -23,8 +23,10 @@ To use:
 
 1. press the keybind to get dom0 fetch infos
 
-2. run ~/qubesfetch
+2. Wait a few seconds for dom0 to interface with less trusted qubes
 
-3. gawk at your pretty system
+3. run qubesfetch shell script
+
+4. gaze at your pretty system
 
 ![screenshot](https://raw.githubusercontent.com/tillay8/qubesfetch/refs/heads/main/screenshot.png)
