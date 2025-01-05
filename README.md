@@ -9,7 +9,7 @@ custom fetch scripts for QubesOS
 
 2. Download the fetchinfo.sh script
 
-`https://raw.githubusercontent.com/tillay8/qubefetch/refs/heads/main/fetchinfo.sh&&chmod +x ~/fetchinfo.sh`
+`wget https://raw.githubusercontent.com/tillay8/qubefetch/refs/heads/main/fetchinfo.sh&&chmod +x ~/fetchinfo.sh`
 
 3. Move fetchinfo.sh script into dom0
 
