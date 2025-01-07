@@ -40,7 +40,6 @@ INFO_FILE_PATH="/home/user/QubesIncoming/dom0/fetchinfo"
 infos=(
   "★ ──Base System Information─────────────────── ★"
   "Qubes Version"
-  "Computer Brand"
   "Computer Model"
   "Total System Memory"
   "Total Memory Usage"
@@ -65,7 +64,6 @@ infos=(
 declare -A modules=(
   ["★ ──Base System Information─────────────────── ★"]=""
   ["Qubes Version"]='sed -n "1p" $INFO_FILE_PATH'
-  ["Computer Brand"]='sed -n "9p" $INFO_FILE_PATH'
   ["Computer Model"]='sed -n "4p" $INFO_FILE_PATH'
   ["Total System Memory"]='sed -n "2p" $INFO_FILE_PATH'
   ["Total Memory Usage"]='sed -n "3p" $INFO_FILE_PATH'
