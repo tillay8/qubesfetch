@@ -83,7 +83,7 @@ declare -A modules=(
   ["Zsh Theme"]="echo $(grep 'ZSH_THEME=' ~/.zshrc | sed -E 's/.*=\"(.*)\".*/\1/')"
   ["Memory"]="free -k | awk '/^Mem:/ {used=\$3; total=\$2; printf \"%.2f GiB / %.2f GiB\n\", used/1024/1024, total/1024/1024}'"
   ["Qube Storage Usage"]='echo -n "$(du -sh ~ | cut -f1) / "; df -h --output=size / | tail -1 | cut -c 3-'
-  ["Local IP"]='ip addr | grep "scope global" | cut -c 10-23'
+  ["Local IP"]='ip addr | grep "scope global" | cut -c 10-23 | sed -n 1p'
   ["Mullvad Status"]='curl -s https://am.i.mullvad.net/connected | grep -q "not connected" && echo "Not Connected" || echo "Connected"'
 
   )
