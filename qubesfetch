@@ -1,3 +1,4 @@
+#!/bin/bash
 LOGO_TOP="\033[38;2;154;192;255m"
 LOGO_LEFT="\033[38;2;99;161;255m"
 LOGO_RIGHT="\033[38;2;53;117;217m"
@@ -6,7 +7,7 @@ HEADER_COLOR="\033[1;38;2;53;117;217m"
 LABEL_COLOR="\033[1;38;2;150;140;240m"
 INFOS_COLOR="\033[22m\033[38;2;220;230;255m"
 
-clear # :(
+clear
 
 echo -e "${LOGO_TOP}                     .lxxo'                     "
 echo -e "${LOGO_TOP}                  .:xOOOOOOxc'                  "
@@ -37,68 +38,44 @@ echo -e "${LOGO_TOP}QubesFetch by Tillay${LOGO_RIGHT}                  ;:;      
 
 INFO_FILE_PATH="/home/user/QubesIncoming/dom0/fetchinfo"
 
+# Single array with alternating labels and commands
 infos=(
-  "★ ──Base System Information─────────────────── ★"
-  "Qubes Version"
-  "Computer Model"
-  "Total System Memory"
-  "Total Memory Usage"
-  "CPU"
-  "System Uptime"
-  "Monitor Resolution"
-  "Total Disc Size"
-  "Qubes Partition Size"
-  "Kernel Version"
-  "BIOS"
-  " "
-  "★ ──Qube System Information─────────────────── ★"
-  "Qube System"
-  "Qube Name"
-  "Qube Uptime"
-  "Zsh Theme"
-  "Memory"
-  "Qube Storage Usage"
-  "Local IP"
-  "Mullvad Status"
+  "★ ──Base System Information─────────────────── ★" ""
+  "Qubes Version" 'sed -n "1p" $INFO_FILE_PATH'
+  "Computer Model" 'sed -n "4p" $INFO_FILE_PATH'
+  "Total System Memory" 'sed -n "2p" $INFO_FILE_PATH'
+  "Total Memory Usage" 'sed -n "3p" $INFO_FILE_PATH'
+  "CPU" 'lscpu | grep name | cut -c 39-'
+  "System Uptime" 'sed -n "8p" $INFO_FILE_PATH'
+  "Monitor Resolution" 'xrandr | sed -n 3p | cut -c 6-14'
+  "Total Disc Size" 'sed -n "6p" $INFO_FILE_PATH'
+  "Qubes Partition Size" 'sed -n "7p" $INFO_FILE_PATH'
+  "Kernel Version" 'uname -r | sed "s/\(.*\)\.[^\.]*$/\1/"'
+  "BIOS" 'sed -n "5p" $INFO_FILE_PATH'
+  " " ""
+  "★ ──Qube System Information─────────────────── ★" ""
+  "Qube System" "echo \$(grep -Po 'PRETTY_NAME=\"\K[^\"]+' /etc/os-release) \$(uname -m)"
+  "Qube Name" "hostname"
+  "Qube Uptime" "uptime -p | cut -c 4-"
+  "Zsh Theme" "echo $(grep 'ZSH_THEME=' ~/.zshrc | sed -E 's/.*=\"(.*)\".*/\1/')"
+  "Memory" "free -k | awk '/^Mem:/ {used=\$3; total=\$2; printf \"%.2f GiB / %.2f GiB\n\", used/1024/1024, total/1024/1024}'"
+  "Qube Storage Usage" 'echo -n "$(du -sh ~ | cut -f1) / "; df -h --output=size / | tail -1 | cut -c 3-'
+  "Local IP" 'ip addr | grep "scope global" | cut -c 10-23 | sed -n 1p'
+  "Mullvad Status" 'curl -s https://am.i.mullvad.net/connected | grep -q "not connected" && echo "Not Connected" || echo "Connected"'
 )
-
-declare -A modules=(
-  ["★ ──Base System Information─────────────────── ★"]=""
-  ["Qubes Version"]='sed -n "1p" $INFO_FILE_PATH'
-  ["Computer Model"]='sed -n "4p" $INFO_FILE_PATH'
-  ["Total System Memory"]='sed -n "2p" $INFO_FILE_PATH'
-  ["Total Memory Usage"]='sed -n "3p" $INFO_FILE_PATH'
-  ["CPU"]='lscpu | grep name | cut -c 39-'
-  ["System Uptime"]='sed -n "8p" $INFO_FILE_PATH'
-  ["Monitor Resolution"]='xrandr | sed -n 3p | cut -c 6-14'
-  ["Total Disc Size"]='sed -n "6p" $INFO_FILE_PATH'
-  ["Qubes Partition Size"]='sed -n "7p" $INFO_FILE_PATH'
-  ["Kernel Version"]='uname -r | sed "s/\(.*\)\.[^\.]*$/\1/"'
-  ["BIOS"]='sed -n "5p" $INFO_FILE_PATH'
-  [" "]=""
-  ["★ ──Qube System Information─────────────────── ★"]=""
-  ["Qube System"]="echo \$(grep -Po 'PRETTY_NAME=\"\K[^\"]+' /etc/os-release) \$(uname -m)"
-  ["Qube Name"]="hostname"
-  ["Qube Uptime"]="uptime -p | cut -c 4-"
-  ["Zsh Theme"]="echo $(grep 'ZSH_THEME=' ~/.zshrc | sed -E 's/.*=\"(.*)\".*/\1/')"
-  ["Memory"]="free -k | awk '/^Mem:/ {used=\$3; total=\$2; printf \"%.2f GiB / %.2f GiB\n\", used/1024/1024, total/1024/1024}'"
-  ["Qube Storage Usage"]='echo -n "$(du -sh ~ | cut -f1) / "; df -h --output=size / | tail -1 | cut -c 3-'
-  ["Local IP"]='ip addr | grep "scope global" | cut -c 10-23 | sed -n 1p'
-  ["Mullvad Status"]='curl -s https://am.i.mullvad.net/connected | grep -q "not connected" && echo "Not Connected" || echo "Connected"'
-
-  )
 
 tput sc
 line=0
-for label in "${infos[@]}"; do
+for ((i = 0; i < ${#infos[@]}; i += 2)); do
+  label="${infos[$i]}"
+  command="${infos[$i + 1]}"
   tput cup $line 50
-  value="${modules[$label]}"
-  if [[ -z "$value" ]]; then
+  if [[ -z "$command" ]]; then
     echo -e -n "${HEADER_COLOR}$label"
   else
     echo -e -n "${LABEL_COLOR}$label"
     echo -e -n "${INFOS_COLOR}: "
-    output=$(eval "$value")
+    output=$(eval "$command")
     echo -e "${INFOS_COLOR}$output"
   fi
   ((line++))
