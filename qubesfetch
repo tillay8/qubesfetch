@@ -47,6 +47,7 @@ infos=(
   "Total Memory Usage" 'sed -n "3p" $INFO_FILE_PATH'
   "CPU" 'lscpu | grep name | cut -c 39-'
   "System Uptime" 'sed -n "8p" $INFO_FILE_PATH'
+  "Desktop Environment" 'sed -n "9p" $INFO_FILE_PATH'
   "Monitor Resolution" 'xrandr | sed -n 3p | cut -c 6-14'
   "Total Disc Size" 'sed -n "6p" $INFO_FILE_PATH'
   "Qubes Partition Size" 'sed -n "7p" $INFO_FILE_PATH'

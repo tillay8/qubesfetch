@@ -6,6 +6,7 @@ echo "$(qubes-hcl-report | grep 'BIOS:' | cut -c 8-)" >> /home/$USER/fetchinfo
 echo "$(lsblk -m --output SIZE -n -d /dev/nvme0n1)" >> /home/$USER/fetchinfo
 echo "$(lsblk | grep crypt | cut -c 88-95)" >> /home/$USER/fetchinfo
 echo "$(uptime -p | cut -c 4-)" >> /home/$USER/fetchinfo
+echo "$(echo $XDG_SESSION_DESKTOP) $(echo $XDG_SESSION_TYPE)" >> /home/$USER/fetchinfo
 rm ~/*.yml
 for vm in "$@"; do qvm-run -q -a "$vm" -- 'rm ~/QubesIncoming/dom0/fetchinfo'; qvm-copy-to-vm "$vm" /home/$USER/fetchinfo; done
 rm ~/fetchinfo
